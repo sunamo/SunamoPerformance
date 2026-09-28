@@ -1,0 +1,16 @@
+global using System;
+global using System.Collections.Concurrent;
+global using System.Collections.Generic;
+global using System.Diagnostics;
+global using System.IO;
+global using System.Linq;
+global using System.Text;
+global using System.Threading.Tasks;
+global using SunamoFileIO;
+global using SunamoFileSystem;
+global using SunamoRandom;
+global using SunamoStopwatch;
+global using SunamoStringGetLines;
+global using SunamoStringReplace;
+global using SunamoStringSplit;
+global using SunamoPerformance;
