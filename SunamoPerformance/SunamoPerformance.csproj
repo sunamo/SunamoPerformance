@@ -4,7 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <Version>26.9.28.8</Version>
+    <Version>26.9.28.9</Version>
     <Description>Manual performance benchmarks for string replacing, file IO and string lookup structures</Description>
     <Authors>www.sunamo.cz</Authors>
     <Copyright>www.sunamo.cz</Copyright>
