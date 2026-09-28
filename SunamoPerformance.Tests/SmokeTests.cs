@@ -124,4 +124,16 @@ public class SmokeTests
 
         Assert.Equal("hello", wrapper.ToString());
     }
+
+    /// <summary>Verifies StringReplacingBenchmark.MeasureAll runs every implementation against small test cases without exceptions.</summary>
+    [Fact]
+    public void StringReplacingBenchmark_MeasuresAllImplementations()
+    {
+        var testCases = new[] { (ReplacementCount: 5, InputLength: 200) };
+
+        var results = StringReplacingBenchmark.MeasureAll(testCases);
+
+        Assert.Equal(4, results.Count);
+        Assert.All(results.Values, averageMilliseconds => Assert.True(averageMilliseconds >= 0));
+    }
 }
