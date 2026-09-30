@@ -11,7 +11,7 @@ public static class ReadingFilesBenchmark
     public static long MeasureReadAllTextSync(string filePath)
     {
         StopwatchStatic.Start();
-        TF.ReadAllTextSync(filePath);
+        BenchmarkFileHelper.ReadAllTextSync(filePath);
         return StopwatchStatic.StopAndPrintElapsed("TF.ReadAllTextSync");
     }
 
@@ -19,7 +19,7 @@ public static class ReadingFilesBenchmark
     public static async Task<long> MeasureReadAllTextAsync(string filePath)
     {
         StopwatchStatic.Start();
-        await TF.ReadAllText(filePath);
+        await BenchmarkFileHelper.ReadAllText(filePath);
         return StopwatchStatic.StopAndPrintElapsed("TF.ReadAllText (async)");
     }
 
@@ -27,14 +27,14 @@ public static class ReadingFilesBenchmark
     public static async Task<long> MeasureReadAllLinesAsync(string filePath)
     {
         StopwatchStatic.Start();
-        await TF.ReadAllLines(filePath);
+        await BenchmarkFileHelper.ReadAllLines(filePath);
         return StopwatchStatic.StopAndPrintElapsed("TF.ReadAllLines (async)");
     }
 
     /// <summary>Creates a sibling copy path for the given file by inserting a suffix between the file name and its extension, using FS.InsertBetweenFileNameAndExtension.</summary>
     public static string BuildSiblingCopyPath(string filePath, string suffix)
     {
-        return FS.InsertBetweenFileNameAndExtension(filePath, suffix);
+        return BenchmarkFileHelper.InsertBetweenFileNameAndExtension(filePath, suffix);
     }
 
     /// <summary>Runs all three reading benchmarks (sync, async, async lines) against the same file and returns their elapsed milliseconds keyed by benchmark name.</summary>

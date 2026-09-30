@@ -10,9 +10,9 @@ public static class ManyStringReplacingBenchmark
     /// <summary>Parses a "replace many" formatted text (lines of "from-&gt;to") into two parallel lists: values to replace from and values to replace to, with trailing empty lines removed.</summary>
     public static (List<string> ReplaceFrom, List<string> ReplaceTo) ParseReplacePairs(string replacePairsText)
     {
-        var splitPairs = SHSplit.SplitFromReplaceManyFormat(replacePairsText);
-        var replaceFrom = SHGetLines.GetLines(splitPairs.Item1).Where(value => !string.IsNullOrEmpty(value)).ToList();
-        var replaceTo = SHGetLines.GetLines(splitPairs.Item2).Where(value => !string.IsNullOrEmpty(value)).ToList();
+        var splitPairs = BenchmarkTextHelper.SplitFromReplaceManyFormat(replacePairsText);
+        var replaceFrom = BenchmarkTextHelper.GetLines(splitPairs.Item1).Where(value => !string.IsNullOrEmpty(value)).ToList();
+        var replaceTo = BenchmarkTextHelper.GetLines(splitPairs.Item2).Where(value => !string.IsNullOrEmpty(value)).ToList();
         return (replaceFrom, replaceTo);
     }
 
@@ -20,14 +20,14 @@ public static class ManyStringReplacingBenchmark
     public static long MeasureReplaceAll3(string content, IList<string> replaceFrom, IList<string> replaceTo)
     {
         StopwatchStatic.Start();
-        SHReplace.ReplaceAll3(replaceFrom, replaceTo, false, content);
+        BenchmarkTextHelper.ReplaceAll(replaceFrom, replaceTo, content);
         return StopwatchStatic.StopAndPrintElapsed("SHReplace.ReplaceAll3");
     }
 
     /// <summary>Reads the given file synchronously and measures how long SHReplace.ReplaceAll3 takes to apply the replace pairs to its content.</summary>
     public static long MeasureReplaceAll3ForFile(string filePath, IList<string> replaceFrom, IList<string> replaceTo)
     {
-        var content = TF.ReadAllTextSync(filePath);
+        var content = BenchmarkFileHelper.ReadAllTextSync(filePath);
         return MeasureReplaceAll3(content, replaceFrom, replaceTo);
     }
 }

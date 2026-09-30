@@ -33,13 +33,6 @@
     <None Include="readme.md" Pack="True" PackagePath="." />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" Pack="True" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.102" PrivateAssets="all" />
-    <PackageReference Include="SunamoStringSplit" Version="*" />
-    <PackageReference Include="SunamoStringGetLines" Version="*" />
-    <PackageReference Include="SunamoStringReplace" Version="*" />
-    <PackageReference Include="SunamoStopwatch" Version="*" />
-    <PackageReference Include="SunamoFileIO" Version="*" />
-    <PackageReference Include="SunamoFileSystem" Version="*" />
-    <PackageReference Include="SunamoRandom" Version="*" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="all" />

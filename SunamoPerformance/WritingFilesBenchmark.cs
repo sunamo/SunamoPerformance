@@ -18,7 +18,7 @@ public static class WritingFilesBenchmark
     public static long MeasureSaveFile(string filePath, string content)
     {
         StopwatchStatic.Start();
-        TF.SaveFile(content, filePath);
+        BenchmarkFileHelper.SaveFile(content, filePath);
         return StopwatchStatic.StopAndPrintElapsed("TF.SaveFile");
     }
 
@@ -26,7 +26,7 @@ public static class WritingFilesBenchmark
     public static async Task<long> MeasureWriteAllTextAsync(string filePath, string content)
     {
         StopwatchStatic.Start();
-        await TF.WriteAllText(filePath, content);
+        await BenchmarkFileHelper.WriteAllText(filePath, content);
         return StopwatchStatic.StopAndPrintElapsed("TF.WriteAllText (async)");
     }
 
