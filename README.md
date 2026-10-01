@@ -1,5 +1,10 @@
 # SunamoPerformance
 
+## Short description
+
+Sada ručních výkonnostních benchmarků pro porovnávání implementací běžných operací: práce s řetězci (hromadné nahrazování, vyhledávání), čtení a zápis souborů. Slouží k ověření, že zvolená implementace v ostatních Sunamo balíčcích je rychlostně opodstatněná.
+Balíček je self-contained: kromě `Microsoft.Extensions.Logging.Abstractions` nereferencuje žádné jiné balíčky.
+
 Manual performance benchmarks for string replacing, file IO and string lookup structures
 
 ## Overview
