@@ -24,12 +24,12 @@ internal static class RandomStringHelper
     internal static string RandomString(int length, int numberOfNonAlphanumericCharacters)
     {
         var stringChars = new char[length];
-        var i = 0;
+        var index = 0;
 
-        for (; i < numberOfNonAlphanumericCharacters; i++)
-            stringChars[i] = specialCharsAll[random.Next(specialCharsAll.Length)];
+        for (; index < numberOfNonAlphanumericCharacters; index++)
+            stringChars[index] = specialCharsAll[random.Next(specialCharsAll.Length)];
 
-        for (; i < length; i++) stringChars[i] = alphanumericChars[random.Next(alphanumericChars.Length)];
+        for (; index < length; index++) stringChars[index] = alphanumericChars[random.Next(alphanumericChars.Length)];
 
         return new string(stringChars);
     }

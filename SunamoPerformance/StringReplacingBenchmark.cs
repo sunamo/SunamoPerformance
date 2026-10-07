@@ -13,7 +13,7 @@ public static class StringReplacingBenchmark
     public static string BuildRandomInputString(int length)
     {
         var input = new StringBuilder();
-        for (var i = 0; i < length; i++)
+        for (var index = 0; index < length; index++)
         {
             var randomNumber = Seed.Next(0, 3);
             var character = randomNumber == 0 ? 'A' : randomNumber == 1 ? 'B' : 'C';
@@ -26,7 +26,7 @@ public static class StringReplacingBenchmark
     public static List<string> BuildRandomReplacements(int replacementsCount)
     {
         var replacements = new List<string>();
-        for (var i = 0; i < replacementsCount; i++)
+        for (var index = 0; index < replacementsCount; index++)
         {
             var randomNumber = Seed.Next(0, 3);
             var replaceIteration = randomNumber == 0 ? "AB" : randomNumber == 1 ? "BC" : "CD";
@@ -61,9 +61,9 @@ public static class StringReplacingBenchmark
 
         Parallel.ForEach(rangePartitioner, (range, loopState) =>
         {
-            for (var i = range.Item1; i < range.Item2; i++)
+            for (var replacementIndex = range.Item1; replacementIndex < range.Item2; replacementIndex++)
             {
-                var result = input.Replace(replace, replacements[i]);
+                var result = input.Replace(replace, replacements[replacementIndex]);
             }
         });
     }
@@ -85,42 +85,42 @@ public static class StringReplacingBenchmark
 
         Parallel.ForEach(replaceByPartitioner, (outerRange, outerLoopState) =>
         {
-            for (var g = outerRange.Item1; g < outerRange.Item2; g++)
+            for (var replaceByIndex = outerRange.Item1; replaceByIndex < outerRange.Item2; replaceByIndex++)
             {
-                var replaceWith = replaceBy[g];
+                var replaceWith = replaceBy[replaceByIndex];
 
                 var finalSize = input.Length - (indexes.Count * replace.Length) + (indexes.Count * replaceWith.Length);
                 var finalResult = new char[finalSize];
 
                 Parallel.ForEach(rangePartitioner, (innerRange, innerLoopState) =>
                 {
-                    for (var i = innerRange.Item1; i < innerRange.Item2; i++)
+                    for (var matchIndex = innerRange.Item1; matchIndex < innerRange.Item2; matchIndex++)
                     {
-                        var currentIndex = indexes[i];
-                        var prevIndex = i > 0 ? indexes[i - 1] : -replace.Length;
+                        var currentIndex = indexes[matchIndex];
+                        var prevIndex = matchIndex > 0 ? indexes[matchIndex - 1] : -replace.Length;
 
-                        var n = 0;
+                        var outputPosition = 0;
                         if (prevIndex >= 0)
                         {
-                            n = prevIndex + replace.Length;
+                            outputPosition = prevIndex + replace.Length;
                             if (replace.Length != replaceWith.Length)
                             {
-                                var offset = (replace.Length - replaceWith.Length) * i;
+                                var offset = (replace.Length - replaceWith.Length) * matchIndex;
                                 var dir = replace.Length < replaceWith.Length;
-                                n = prevIndex + offset + replaceWith.Length + (dir ? 1 : -1);
+                                outputPosition = prevIndex + offset + replaceWith.Length + (dir ? 1 : -1);
                             }
                         }
 
-                        for (var k = prevIndex + replace.Length; k < currentIndex; k++)
-                            finalResult[n++] = input[k];
+                        for (var prefixIndex = prevIndex + replace.Length; prefixIndex < currentIndex; prefixIndex++)
+                            finalResult[outputPosition++] = input[prefixIndex];
 
-                        foreach (var ch in replaceWith)
-                            finalResult[n++] = ch;
+                        foreach (var character in replaceWith)
+                            finalResult[outputPosition++] = character;
 
                         if (currentIndex == indexes[indexes.Count - 1])
                         {
-                            for (var k = currentIndex + replace.Length; k < input.Length; k++)
-                                finalResult[n++] = input[k];
+                            for (var suffixIndex = currentIndex + replace.Length; suffixIndex < input.Length; suffixIndex++)
+                                finalResult[outputPosition++] = input[suffixIndex];
                         }
                     }
                 });
@@ -134,11 +134,11 @@ public static class StringReplacingBenchmark
         var indexes = new List<int>();
 
         var len = inputLength;
-        fixed (char* i = input, r = replace)
+        fixed (char* inputChars = input, replaceChars = replace)
         {
             while (--len > -1)
             {
-                if (i[len] == r[0] && i[len + 1] == r[1])
+                if (inputChars[len] == replaceChars[0] && inputChars[len + 1] == replaceChars[1])
                 {
                     indexes.Add(len--);
                 }
@@ -148,22 +148,22 @@ public static class StringReplacingBenchmark
         var idx = indexes.ToArray();
         len = indexes.Count;
 
-        Parallel.For(0, replaceBy.Length, l => FredouProcess(input, len, replaceBy[l], idx, idx.Length));
+        Parallel.For(0, replaceBy.Length, replaceByIndex => FredouProcess(input, len, replaceBy[replaceByIndex], idx, idx.Length));
     }
 
     private static unsafe void FredouProcess(string input, int len, string replaceBy, int[] idx, int idxLen)
     {
         var output = new char[len];
 
-        fixed (char* o = output, i = input)
+        fixed (char* outputChars = output, inputChars = input)
         {
-            for (var l = 0; l < len; ++l)
-                o[l] = i[l];
+            for (var charIndex = 0; charIndex < len; ++charIndex)
+                outputChars[charIndex] = inputChars[charIndex];
 
-            for (var l = 0; l < idxLen; ++l)
+            for (var matchIndex = 0; matchIndex < idxLen; ++matchIndex)
             {
-                o[idx[l]] = replaceBy[0];
-                o[idx[l] + 1] = replaceBy[1];
+                outputChars[idx[matchIndex]] = replaceBy[0];
+                outputChars[idx[matchIndex] + 1] = replaceBy[1];
             }
         }
     }
