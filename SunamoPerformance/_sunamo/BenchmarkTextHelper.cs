@@ -61,8 +61,8 @@ internal static class BenchmarkTextHelper
     /// <param name="content">The content to process.</param>
     internal static string ReplaceAll(IList<string> replaceFrom, IList<string> replaceTo, string content)
     {
-        for (var i = 0; i < replaceFrom.Count; i++)
-            content = content.Replace(replaceFrom[i], replaceTo[i]);
+        for (var index = 0; index < replaceFrom.Count; index++)
+            content = content.Replace(replaceFrom[index], replaceTo[index]);
         return content;
     }
 }
