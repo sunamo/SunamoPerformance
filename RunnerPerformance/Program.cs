@@ -1,4 +1,3 @@
-// variables names: ok
 namespace RunnerPerformance;
 
 internal class Program
